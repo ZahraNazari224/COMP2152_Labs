@@ -180,6 +180,8 @@ def parse_arp_table(output):
 # ============================================================
 
 def write_to_log(filename, entry):
+    with open(filename, "a") as file:
+        file.write(entry+ "\n")
     """Append a log entry to a text file."""
     # *** YOUR CODE HERE ***
     # Open the file in append mode ("a") using a with statement
@@ -188,10 +190,13 @@ def write_to_log(filename, entry):
 
 
 def read_log(filename):
+    with open(filename, "r") as file:
+        return file.read()
     """Read and return the entire contents of a log file."""
     # *** YOUR CODE HERE ***
     # Open the file in read mode ("r") using a with statement
     # Return the result of file.read()
+   
     pass
 
 
@@ -226,6 +231,9 @@ LOG_FILE = "diagnostics.csv"
 def log_to_csv(filename, command, target, result, status):
     """Append one row to the CSV log file with a timestamp."""
     timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    with open(filename, "a", newline="") as file:
+        writer = csv.writer(file)
+        writer.writerows([timestamp, command, target, result, status])
     # *** YOUR CODE HERE ***
     # Open filename in append mode ("a") with newline=""
     # Create a csv.writer(file)
@@ -234,6 +242,10 @@ def log_to_csv(filename, command, target, result, status):
 
 
 def read_csv_log(filename):
+    with open(filename, "r", newline="")as file:
+        reader = csv.reader(file)
+        for row in reader:
+            print(" | ".join(row))
     """Read and display all rows from the CSV log file."""
     # *** YOUR CODE HERE ***
     # Open filename in read mode ("r") with newline=""
@@ -329,6 +341,21 @@ def safe_nslookup(domain):
 
 
 def safe_read_log(filename):
+    try:
+        with open(filename, "r") as file:
+
+            content= file.read()
+            if content == 0:
+                print("Log file is empty.")
+                return ""
+            else:
+                return content
+    except FileNotFoundError:
+        print("file not found. Run a diagnostic first.")
+        return ""
+    finally:
+        print("This always runs - success or failure.")
+
     """Read a log file with error handling for missing files."""
     # *** YOUR CODE HERE ***
     # try:
@@ -509,5 +536,5 @@ def main():
 #  TEST YOUR WORK
 # ============================================================
 # After completing Tasks 1-3, uncomment the line below to run:
-# main()
+main()
 # ============================================================
