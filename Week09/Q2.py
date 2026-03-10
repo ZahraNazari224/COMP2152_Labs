@@ -13,13 +13,13 @@ import threading
 #   3. lock.acquire(), print(f"[DONE]  {name} ({duration}s)"), lock.release()
 def simulate_task(name, duration, lock):
     lock.acquire()
-    print("[START] {name}")
+    print(f"[START] {name}")
     lock.release()
     
     time.sleep(duration)
 
     lock.acquire()
-    print("[Done]] {name} {duration}s")
+    print(f"[Done]] {name} {duration}s")
     lock.release()
 
 
